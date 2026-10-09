@@ -12,7 +12,7 @@ RUN node scripts/build.mjs \
  && find dist -type d -exec chmod 0555 {} + \
  && find dist -type f -exec chmod 0444 {} +
 
-FROM nginxinc/nginx-unprivileged:1.30.5-alpine-slim@sha256:3af0c10d960cc2502427fe1219c52989d309e7d65596869c60a34fd2fa2406f0
+FROM nginxinc/nginx-unprivileged:1.31.6-alpine-slim@sha256:1517d8c358e2e093957ebee087afa9eb19a32f5d7ecb711b7429e369cb998224
 
 COPY --chmod=0444 docker/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY --chmod=0555 docker/start.sh /usr/local/bin/start-site
