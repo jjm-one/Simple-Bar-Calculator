@@ -1,0 +1,17 @@
+{
+  "name": "Cocktail Bar",
+  "name_de": "Cocktail-Bar",
+  "currency": "EUR",
+  "beverages": [
+    { "id": "cocktail", "name": "Cocktail", "price": 4.0, "deposit_item_id": "cup" },
+    { "id": "longdrink", "name": "Longdrink", "price": 3.0, "deposit_item_id": "cup" },
+    {
+      "id": "cocktail-alcohol-free",
+      "name": "Cocktail (alcohol-free)",
+      "name_de": "Cocktail ALK-FREI",
+      "price": 2.0,
+      "deposit_item_id": "cup"
+    }
+  ],
+  "deposit_items": [{ "id": "cup", "name": "Cup", "name_de": "Becher", "deposit": 2.0 }]
+}

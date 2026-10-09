@@ -1,0 +1,87 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_call:
+    inputs:
+      upload-pages:
+        description: Upload the tested production site for Pages deployment
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Update npm
+        run: npm install --global "$(node -p 'require("./package.json").packageManager')" --ignore-scripts --no-audit --no-fund
+      - name: Install project
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check formatting
+        run: npm run format:check
+      - name: Run unit tests
+        run: npm test
+      - name: Check source and create production build
+        run: |
+          npm run check
+          npm run build
+      # The runner image ships Google Chrome; the tests fail if it is missing.
+      - name: Run browser tests (phone layout, ordering, offline)
+        run: npm run test:ui
+      - name: Upload Pages artifact
+        if: inputs.upload-pages
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  container:
+    name: Test hardened Docker deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HTTP_PORT: "18080"
+      HOST_PORT: "18081"
+      DOCKER_NETWORK: simple-bar-ci
+      CONFIG_DIR: ${{ github.workspace }}/.tmp/docker-config
+      DOCKER_TEST_CONFIG_DIR: ${{ github.workspace }}/.tmp/docker-config
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Prepare external test menu
+        run: |
+          mkdir -p "$CONFIG_DIR"
+          cp public/config.json "$CONFIG_DIR/config.json"
+          chmod 755 "$CONFIG_DIR"
+          chmod 644 "$CONFIG_DIR/config.json"
+      - name: Validate Compose and start the hardened container
+        run: |
+          docker compose config --quiet
+          docker compose build --pull
+          docker compose up -d --wait --wait-timeout 90
+      - name: Test Docker network, HTTP, and container restrictions
+        run: python3 tests/docker.test.py
+      - name: Container logs
+        if: failure()
+        run: docker compose logs
+      - name: Clean up
+        if: always()
+        run: docker compose down --volumes

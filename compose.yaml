@@ -1,0 +1,57 @@
+name: simple-bar-calculator
+
+services:
+  site:
+    image: simple-bar-calculator:local
+    build: .
+    environment:
+      HTTP_PORT: ${HTTP_PORT:-8080}
+    expose:
+      - "${HTTP_PORT:-8080}"
+    # Fixed loopback binding: never publish on all host interfaces.
+    ports:
+      - target: ${HTTP_PORT:-8080}
+        published: "${HOST_PORT:-8080}"
+        host_ip: 127.0.0.1
+        protocol: tcp
+    networks:
+      backend:
+        aliases:
+          - simple-bar-calculator
+    volumes:
+      - type: bind
+        source: ${CONFIG_DIR:-./config}
+        target: /etc/simple-bar-config
+        read_only: true
+        bind:
+          create_host_path: false
+    user: "101:101"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,uid=101,gid=101,mode=0700
+    pids_limit: 32
+    mem_limit: 64m
+    cpus: 0.5
+    restart: unless-stopped
+    stop_signal: SIGQUIT
+    stop_grace_period: 10s
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:$${HTTP_PORT}/config.json"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+networks:
+  backend:
+    name: ${DOCKER_NETWORK:-simple-bar-backend}
+    driver: bridge

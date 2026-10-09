@@ -1,0 +1,15 @@
+# Only the site sources, build script and Nginx configuration enter the build context.
+**
+!Dockerfile
+!docker/
+!docker/**
+!index.html
+!LICENSE
+!COPYING
+!scripts/build.mjs
+!src/
+!src/**
+!public/
+!public/**
+src/**/*.test.mjs
+**/.DS_Store

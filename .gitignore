@@ -1,0 +1,19 @@
+# Local editor and test output
+.DS_Store
+Thumbs.db
+.vscode/
+.tmp/
+node_modules/
+coverage/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+!.env.example
+
+# Host-managed Docker menu data
+/config/
+
+# Generated production output
+/dist/

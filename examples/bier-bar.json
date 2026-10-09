@@ -1,0 +1,23 @@
+{
+  "name": "Beer Bar",
+  "name_de": "Bier-Bar",
+  "currency": "EUR",
+  "beverages": [
+    { "id": "beer", "name": "Beer", "name_de": "Bier", "price": 3.0, "deposit_item_id": "bottle" },
+    {
+      "id": "soft-drink",
+      "name": "Soft drink",
+      "name_de": "Softdrink",
+      "price": 2.0,
+      "deposit_item_id": "bottle"
+    },
+    {
+      "id": "water",
+      "name": "Water",
+      "name_de": "Wasser",
+      "price": 1.0,
+      "deposit_item_id": "bottle"
+    }
+  ],
+  "deposit_items": [{ "id": "bottle", "name": "Bottle", "name_de": "Flasche", "deposit": 2.0 }]
+}

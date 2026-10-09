@@ -1,0 +1,39 @@
+{
+  "name": "@jjm-one/simple-bar-calculator",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs --dev",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs",
+    "check": "node --check src/main.js && node --check src/lib/calc.mjs && node --check src/i18n/translations.js && node --check public/sw.js",
+    "test": "node --test src/lib/*.test.mjs scripts/*.test.mjs",
+    "test:watch": "node --test --watch src/lib/*.test.mjs scripts/*.test.mjs",
+    "test:ui": "node --test tests/ui.test.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "engines": {
+    "node": ">=24.21.0",
+    "npm": ">=12.2.0"
+  },
+  "description": "Static bilingual bar order and deposit calculator.",
+  "author": {
+    "name": "jjm.one",
+    "url": "https://jjm.one/"
+  },
+  "license": "LGPL-3.0-only",
+  "homepage": "https://jjm-one.github.io/Simple-Bar-Calculator/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjm-one/Simple-Bar-Calculator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jjm-one/Simple-Bar-Calculator/issues"
+  },
+  "packageManager": "npm@12.2.0",
+  "devDependencies": {
+    "prettier": "3.9.9"
+  }
+}

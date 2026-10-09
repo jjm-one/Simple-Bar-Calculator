@@ -1,0 +1,12 @@
+# Generated, vendored or third-party files
+dist/
+node_modules/
+package-lock.json
+brand-reference/
+public/*.svg
+public/icons/
+LICENSE
+COPYING
+# Shared configuration maintained in Common-Editor-Config
+.prettierrc.js
+.editorconfig

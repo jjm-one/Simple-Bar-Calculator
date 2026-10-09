@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Static hosts such as GitHub Pages cannot set headers; Nginx adds the full policy including frame-ancestors. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101824" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Simple Bar" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Simple-Bar-Calculator</title>
+    <script src="./main.js" type="module"></script>
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <img class="brand-mark" src="./icons/icon.svg" width="34" height="34" alt="" />
+        <div class="brand-copy">
+          <h1 id="bar-name" class="bar-name">Simple-Bar-Calculator</h1>
+          <div class="subtitle">
+            <span id="app-name" class="app-name" hidden>Simple-Bar-Calculator</span
+            ><span id="connection" class="connection" role="status">Loading menu…</span>
+          </div>
+        </div>
+        <div class="language" role="group" aria-label="Language">
+          <button type="button" class="language-button" data-lang="en" aria-pressed="true">
+            EN</button
+          ><button type="button" class="language-button" data-lang="de" aria-pressed="false">
+            DE
+          </button>
+        </div>
+      </header>
+
+      <div class="content">
+        <p id="config-error" class="error" role="alert" hidden></p>
+        <section class="section" aria-labelledby="drinks-heading">
+          <div class="section-head">
+            <h2 id="drinks-heading" data-i18n="drinks">Drinks</h2>
+            <span id="drink-count" class="section-count">0 items</span>
+          </div>
+          <div id="beverages" class="item-list"></div>
+        </section>
+
+        <section class="section" aria-labelledby="returns-heading">
+          <div class="section-head">
+            <h2 id="returns-heading" data-i18n="returnedHeading">Deposit returns</h2>
+            <span id="return-count" class="section-count">0 items</span>
+          </div>
+          <div id="deposit-items" class="item-list"></div>
+        </section>
+
+        <footer class="attribution">
+          <p>
+            <a
+              href="https://github.com/jjm-one/Simple-Bar-Calculator"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="repository"
+              >GitHub-Repository</a
+            >
+            · © 2026 jjm.one · <a href="./license.txt" target="_blank" rel="noopener">LGPLv3</a> ·
+          </p>
+          <a class="author-logo" href="https://jjm.one/" target="_blank" rel="noopener noreferrer"
+            ><img
+              src="./jjm-one-logo.svg"
+              width="24"
+              height="24"
+              alt="jjm.one"
+              loading="lazy"
+              decoding="async"
+          /></a>
+        </footer>
+      </div>
+
+      <aside class="checkout" aria-label="Order total">
+        <div class="breakdown">
+          <span
+            ><span data-i18n="drinksSubtotal">Drinks + deposits</span>
+            <strong id="drinks-subtotal">€0.00</strong></span
+          ><span
+            ><span data-i18n="returnsSubtotal">Deposit returns</span>
+            <strong id="returns-subtotal">−€0.00</strong></span
+          >
+        </div>
+        <div class="total-row">
+          <div class="total">
+            <span data-i18n="toPay">To pay</span
+            ><strong id="total" aria-live="polite" aria-atomic="true">€0.00</strong>
+          </div>
+          <button id="clear" class="clear" type="button" disabled data-i18n="clear">Clear</button>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+worker_processes 1;
+pid /tmp/nginx.pid;
+error_log /dev/stderr warn;
+
+events {
+    worker_connections 512;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    access_log /dev/stdout;
+    server_tokens off;
+    sendfile on;
+    keepalive_timeout 15s;
+    client_header_timeout 10s;
+    client_body_timeout 10s;
+    client_max_body_size 1k;
+    client_body_temp_path /tmp/client_temp;
+    proxy_temp_path /tmp/proxy_temp;
+    fastcgi_temp_path /tmp/fastcgi_temp;
+    uwsgi_temp_path /tmp/uwsgi_temp;
+    scgi_temp_path /tmp/scgi_temp;
+
+    gzip on;
+    gzip_vary on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    # Filenames are not content-hashed; clients must revalidate deployments.
+    map $uri $cache_control {
+        default "no-cache";
+        /config.json "no-store";
+    }
+
+    server {
+        listen ${HTTP_PORT};
+        server_name _;
+        root /srv/site;
+        index index.html;
+        autoindex off;
+        disable_symlinks on;
+
+        add_header Cache-Control $cache_control always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header X-Frame-Options DENY always;
+        add_header Referrer-Policy no-referrer always;
+        add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'" always;
+        add_header Cross-Origin-Opener-Policy same-origin always;
+        add_header Cross-Origin-Resource-Policy same-origin always;
+
+        if ($request_method !~ ^(GET|HEAD)$) { return 405; }
+
+        # Only this exact file is exposed from the host-mounted directory.
+        location = /config.json {
+            alias /etc/simple-bar-config/config.json;
+            default_type application/json;
+            open_file_cache off;
+        }
+        location = /healthz {
+            default_type text/plain;
+            return 200 'ok\n';
+        }
+        location = /lib/calc.mjs {
+            default_type application/javascript;
+            try_files $uri =404;
+        }
+        location = /manifest.webmanifest {
+            default_type application/manifest+json;
+            try_files $uri =404;
+        }
+        location ~ (^|/)\. {
+            deny all;
+        }
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}

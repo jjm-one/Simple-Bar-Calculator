@@ -1,0 +1,11 @@
+{
+  "currency": "EUR",
+  "beverages": [
+    { "id": 1, "name": "Longdrink", "price": 3.5, "deposit_item_id": 1 },
+    { "id": 2, "name": "Cocktail", "price": 4.0, "deposit_item_id": 2 }
+  ],
+  "deposit_items": [
+    { "id": 1, "name": "Glass", "name_de": "Glas", "deposit": 2.0 },
+    { "id": 2, "name": "Pitcher", "name_de": "Krug", "deposit": 2.0 }
+  ]
+}
