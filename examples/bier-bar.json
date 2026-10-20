@@ -3,7 +3,20 @@
   "name_de": "Bier-Bar",
   "currency": "EUR",
   "beverages": [
-    { "id": "beer", "name": "Beer", "name_de": "Bier", "price": 3.0, "deposit_item_id": "bottle" },
+    {
+      "id": "beer-wine-radler",
+      "name": "Beer/Wine/Radler",
+      "name_de": "Bier/Wein/Radler",
+      "price": 3.0,
+      "deposit_item_id": "bottle"
+    },
+    {
+      "id": "Desperados",
+      "name": "Desperados",
+      "name_de": "Desperados",
+      "price": 4.0,
+      "deposit_item_id": "bottle"
+    },
     {
       "id": "soft-drink",
       "name": "Soft drink",
